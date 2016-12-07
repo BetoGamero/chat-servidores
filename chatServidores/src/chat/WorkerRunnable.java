@@ -9,6 +9,8 @@ package chat;
  *
  * @author alxs1
  */
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -22,10 +24,16 @@ public class WorkerRunnable implements Runnable{
 
     protected Socket clientSocket = null;
     protected String serverText   = null;
+    protected BufferedReader br = null;
 
     public WorkerRunnable(Socket clientSocket, String serverText) {
         this.clientSocket = clientSocket;
         this.serverText   = serverText;
+    }
+    
+    public WorkerRunnable(Socket clientSocket, BufferedReader b) {
+        this.clientSocket = clientSocket;
+        this.br = b;
     }
 
     public void run() {
@@ -33,13 +41,29 @@ public class WorkerRunnable implements Runnable{
             InputStream input  = clientSocket.getInputStream();
             OutputStream output = clientSocket.getOutputStream();
             
-            String linea = "";
+            //String linea = "";
             
             //while(!linea.equals("chau")){
-                Scanner sc = new Scanner(System.in);
-                linea = sc.nextLine();
-
-                output.write(linea.getBytes());
+                /*Scanner sc = new Scanner(System.in);
+                linea = sc.nextLine();*/
+                
+           
+                    //if (linea.isEmpty())
+                    //linea = "enter";
+                    //System.out.println(serverText);
+                    //StringBuilder sb = new StringBuilder();
+                    String linea;
+                    String s = "\n";
+                    while(((linea = br.readLine()) != null)){
+                        //System.out.println(linea);
+                        output.write(linea.getBytes());
+                        
+                        
+                    }
+                    
+                    
+                
+            
             //}
             
             

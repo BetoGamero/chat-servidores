@@ -5,9 +5,16 @@
  */
 package chat;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -63,7 +70,22 @@ public class Nodo implements Runnable{
                 }
                 throw new RuntimeException("Error en conexion",e);
             }
-            new Thread(new WorkerRunnable(clientSocket, "Servidor")).start();
+            String linea;
+            try{
+                InputStream fis = new FileInputStream("C:\\Users\\alxs1\\Documents\\NetBeansProjects\\chat-servidores\\chatServidores\\src\\chat\\procesos.txt");
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                int cont = 0;
+                //while(((linea = br.readLine()) != null) && cont <= 4){
+                    new Thread(new WorkerRunnable(clientSocket, br)).start();
+                    //System.out.println(linea);
+                  //  cont++;
+                //}
+                detenido = true;
+            } catch (IOException ex) {
+                Logger.getLogger(Nodo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
         System.out.println("Servidor Detenido");
     }
